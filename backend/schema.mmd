@@ -1,0 +1,92 @@
+erDiagram
+    PASSENGER {
+      String passenger_id PK
+      String name
+      String passport_number UQ
+      String phone
+      String email
+      String frequent_flyer_status
+      String address
+    }
+    FLIGHT {
+      String flight_number PK
+      String flight_name
+      String source
+      String destination
+      Date departure_time
+      Date arrival_time
+      String departure_terminal
+      String arrival_terminal
+      Int total_seats
+      String airline_name
+      String added_by_airline
+    }
+    BOOKING {
+      String booking_id PK
+      String passenger_passport_number FK
+      String flight_number FK
+      String seat_number
+      String class
+      String booking_status
+    }
+    PAYMENT {
+      String payment_id PK
+      String booking_id FK
+      Number amount
+      String currency
+      String payment_method
+      String payment_status
+    }
+    AIRLINE {
+      String _id PK
+      String name
+      String email UQ
+      String airline_code
+    }
+    CREWMEMBER {
+      String crew_member_id PK
+      String name
+      String email UQ
+      String role
+      String status
+    }
+    CREWASSIGNMENT {
+      String assignment_id PK
+      String flight_number FK
+      String crew_member_id FK
+      String role
+    }
+    BOARDINGPASS {
+      String boarding_pass_id PK
+      String booking_id FK
+      String gate
+      Date boarding_time
+      String group
+      String seat_number
+      String passenger_id FK
+      String flight_number FK
+    }
+    CANCELREQUEST {
+      String _id PK
+      String booking_id FK
+      String status
+    }
+    RESCHEDULEREQUEST {
+      String _id PK
+      String booking_id FK
+      String new_flight_number
+      String new_seat_number
+      String new_class
+      String status
+    }
+
+    PASSENGER ||--o{ BOOKING        : makes
+    FLIGHT    ||--o{ BOOKING        : receives
+    BOOKING   ||--|{ PAYMENT        : has
+    AIRLINE   ||--o{ FLIGHT         : operates
+    PASSENGER ||--o{ BOARDINGPASS   : holds
+    BOOKING   ||--o{ BOARDINGPASS   : issues
+    BOOKING   ||--o{ CANCELREQUEST  : requests
+    BOOKING   ||--o{ RESCHEDULEREQUEST : requests
+    CREWMEMBER ||--o{ CREWASSIGNMENT : assigned
+    FLIGHT    ||--o{ CREWASSIGNMENT : staffed
